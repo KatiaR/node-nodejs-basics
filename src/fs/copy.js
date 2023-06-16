@@ -2,16 +2,11 @@
 import fs from "fs";
 import { readdir } from "node:fs/promises";
 import { targetDirectory, sourceDirectory, errorMessage } from "./constants.js";
+import { checkExistenceDirectory } from "./utils.js";
 
 const callback = (err) => {
 	if (err) {
 		console.error(err);
-	}
-};
-
-const checkExistenceDirectory = () => {
-	if (fs.existsSync(targetDirectory) || !fs.existsSync(sourceDirectory)) {
-		throw new Error(errorMessage);
 	}
 };
 
@@ -22,7 +17,7 @@ const createTargetDirectory = () => {
 };
 
 const copy = async () => {
-	await checkExistenceDirectory();
+	await checkExistenceDirectory(targetDirectory, sourceDirectory, errorMessage);
 	try {
 		await createTargetDirectory();
 		const filesSourceDirectory = await readdir(sourceDirectory);
